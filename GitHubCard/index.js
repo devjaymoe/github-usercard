@@ -3,6 +3,14 @@
            https://api.github.com/users/<your name>
 */
 
+axios.get('https://api.github.com/users/devjaymoe')
+.then(response => {
+  daddy.append(cardComponent(response))
+})
+.catch(error => {
+  console.log('The data was not recieved:', error)
+})
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -45,6 +53,44 @@ const followersArray = [];
 </div>
 
 */
+
+function cardComponent(object){
+  const house = document.createElement('div'),
+        img = document.createElement('img'),
+        infoContainer = document.createElement('div'),
+        userName = document.createElement('h3'),
+        githubName = document.createElement('p'),
+        location = document.createElement('p'),
+        url = document.createElement('p'),
+        urlLink = document.createElement('a'),
+        followers = document.createElement('p'),
+        following = document.createElement('p'),
+        bio = document.createElement('p');
+  // give elements some stuff
+  img.src = object.data.avatar_url;
+  userName.textContent = object.data.name;
+  githubName.textContent = object.data.login;
+  location.textContent = object.data.location;
+  url.textContent = 'Profile: ';
+  urlLink.textContent = object.data.html_url;
+  followers.textContent = object.data.followers;
+  following.textContent = object.data.following;
+  bio.textContent = object.data.bio;
+  // give elements some classes
+  house.classList.add('card');
+  infoContainer.classList.add('card-info');
+  userName.classList.add('name');
+  githubName.classList.add('username');
+  // put that stuff together
+  house.append(img, infoContainer);
+  infoContainer.append(userName, githubName, location, url, followers, following, bio);
+  url.append(urlLink);
+  // return that stuff
+  return house      
+}
+
+const daddy = document.querySelector('.cards');
+
 
 /* List of LS Instructors Github username's: 
   tetondan
