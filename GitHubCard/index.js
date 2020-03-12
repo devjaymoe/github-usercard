@@ -5,7 +5,25 @@
 
 axios.get('https://api.github.com/users/devjaymoe')
 .then(response => {
-  daddy.append(cardComponent(response))
+  daddy.prepend(cardComponent(response))
+})
+.catch(error => {
+  console.log('The data was not recieved:', error)
+})
+
+axios.get('https://api.github.com/users/devjaymoe/following')
+.then(response => {
+  console.log(response);
+  response.data.forEach(item => {
+    const apiURL = item.url;
+    axios.get(apiURL)
+    .then(reponse => {
+      daddy.append(cardComponent(reponse))
+    })
+    .catch(error => {
+      console.log('The follower API was not recieved:', error)
+    })
+  })
 })
 .catch(error => {
   console.log('The data was not recieved:', error)
@@ -70,15 +88,14 @@ function cardComponent(object){
   img.src = object.data.avatar_url;
   userName.textContent = object.data.name;
   githubName.textContent = object.data.login;
-  location.textContent = object.data.location;
+  location.textContent = `Location: ${object.data.location}`;
   url.textContent = 'Profile: ';
   urlLink.textContent = object.data.html_url;
-  followers.textContent = object.data.followers;
-  following.textContent = object.data.following;
-  bio.textContent = object.data.bio;
+  followers.textContent = `Followers: ${object.data.followers}`;
+  following.textContent = `Following: ${object.data.following}`;
+  bio.textContent = `Bio: ${object.data.bio}`;
   // give elements some classes
   house.classList.add('card');
-  infoContainer.classList.add('card-info');
   userName.classList.add('name');
   githubName.classList.add('username');
   // put that stuff together
@@ -90,7 +107,6 @@ function cardComponent(object){
 }
 
 const daddy = document.querySelector('.cards');
-
 
 /* List of LS Instructors Github username's: 
   tetondan
